@@ -5,6 +5,8 @@ import { HousingLocation } from './housinglocation';
   providedIn: 'root'
 })
 export class HousingService {
+  url = "http://localhost:3000/locations";
+
   housingLocationList: HousingLocation[] = [
     {
       id: 0,
@@ -108,12 +110,19 @@ export class HousingService {
     }
   ];
 
-  getAllHousingLocations(): HousingLocation[] {
-    return this.housingLocationList;
+  async getAllHousingLocations(): Promise<HousingLocation[]> {
+    const data = await fetch(this.url);
+    return await data.json() ?? []
   }
 
-  getHousingLocationById(id: number): HousingLocation | undefined {
-    return this.housingLocationList.find(housing => housing.id === id);
+  async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
+    const data = await fetch(`${this.url}/${id}`)
+    return await data.json() ?? undefined
   }
+
+  submitApplication(firstName: string, lastName: string, email: string) {
+    console.log(`Homes application received: firstName: ${firstName}, lastName: ${lastName}, email: ${email}.`)
+  }
+
   constructor() { }
 }
